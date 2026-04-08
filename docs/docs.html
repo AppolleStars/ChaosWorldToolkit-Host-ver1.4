@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聊天记录库 · 日志</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="../cloud/cloud-bridge.js"></script>
+    <style>
+        /* 队伍分组样式（不变） */
+        .team-group {
+            margin-bottom: 2rem;
+            border: 1px solid #e2edf7;
+            border-radius: 1.2rem;
+            overflow: hidden;
+        }
+        .team-group-header {
+            background: #f8fafd;
+            padding: 0.8rem 1.2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2edf7;
+        }
+        .team-group-header:hover {
+            background: #f0f4f9;
+        }
+        .team-group-docs {
+            padding: 0.5rem 1rem;
+            background: white;
+            display: none;
+        }
+        .team-group-docs.expanded {
+            display: block;
+        }
+        .doc-item {
+            background: #fafcff;
+            border: 1px solid #e2edf7;
+            border-radius: 1rem;
+            margin: 0.5rem 0;
+            padding: 0.8rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .new-doc-for-team {
+            margin: 0.5rem 0 0.8rem 0;
+            text-align: right;
+        }
+        .new-doc-for-team button {
+            background: #2c6e9e;
+            color: white;
+            border: none;
+            padding: 0.3rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="docs-container">
+    <div class="top-bar">
+        <button class="back-btn" id="backHomeBtn">← 返回主界面</button>
+        <div>
+            <button class="import-btn" id="importDocBtn">📂 导入JSON文档</button>
+            <button class="create-btn" id="createDocBtn">+ 新建文档</button>
+        </div>
+    </div>
+    <h2>📚 我的文档</h2>
+    <div id="docsListContainer" class="docs-list">
+        <div class="empty-msg">暂无文档，点击“新建文档”开始记录冒险~</div>
+    </div>
+    <div style="margin-top: 1rem; text-align: right;">
+        <button class="export-all-btn" id="exportAllBtn">📦 导出所有文档为JSON</button>
+    </div>
+</div>
+<script src="docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云快照 · 查看</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="config.js"></script>
+    <script src="config.local.js"></script>
+</head>
+<body>
+<div class="docs-container" style="max-width: 560px;">
+    <div class="top-bar">
+        <button type="button" class="back-btn" onclick="location.href='../index.html'">← 返回主界面</button>
+    </div>
+    <h2>☁️ 查看云快照</h2>
+    <p style="color:#5f7f9e; font-size:0.95rem; margin-bottom:1.2rem;">
+        输入本队<strong>只读令牌</strong>后进入工具箱；数据来自 Worker，不会覆盖你手机/电脑本地的 localStorage（退出云快照后即恢复本地数据）。
+    </p>
+    <div class="form-field" style="margin-bottom:1rem;">
+        <label>Worker 根地址（可选）</label>
+        <input type="url" id="viewWorkerBase" placeholder="留空则使用 config.js 中的默认地址" style="width:100%;padding:0.5rem;border-radius:0.6rem;border:1px solid #cbdbe0;">
+    </div>
+    <div class="form-field" style="margin-bottom:1rem;">
+        <label>只读令牌</label>
+        <input type="password" id="viewReadToken" autocomplete="off" placeholder="readToken" style="width:100%;padding:0.5rem;border-radius:0.6rem;border:1px solid #cbdbe0;">
+    </div>
+    <button type="button" class="create-btn" id="viewLoadBtn" style="border:none;cursor:pointer;">加载并进入工具箱</button>
+    <p id="viewStatus" style="margin-top:1rem;color:#c0392b;min-height:1.5em;"></p>
+
+    <hr style="margin:2rem 0;border:none;border-top:1px solid #e2edf7;">
+
+    <h3 style="font-size:1.1rem;margin-bottom:0.5rem;">🎭 主持人 · 全槽合并查看</h3>
+    <p style="color:#5f7f9e; font-size:0.9rem; margin-bottom:1rem;">
+        使用 Worker 环境变量 <code>ADMIN_READ_TOKEN</code> 对应的令牌，合并 <code>snap:1</code>～<code>snap:5</code> 后只读浏览（勿发给各队玩家）。
+    </p>
+    <div class="form-field" style="margin-bottom:1rem;">
+        <label>主持人全量令牌</label>
+        <input type="password" id="viewAdminToken" autocomplete="off" placeholder="ADMIN_READ_TOKEN" style="width:100%;padding:0.5rem;border-radius:0.6rem;border:1px solid #cbdbe0;">
+    </div>
+    <button type="button" class="import-btn" id="viewAdminLoadBtn" style="border:none;cursor:pointer;">加载全量快照并进入工具箱</button>
+    <p id="viewAdminStatus" style="margin-top:0.8rem;color:#c0392b;min-height:1.5em;"></p>
+</div>
+<script>
+(function () {
+  function baseUrl() {
+    var input = document.getElementById('viewWorkerBase');
+    var fromInput = input && input.value ? input.value.trim().replace(/\/$/, '') : '';
+    if (fromInput) return fromInput;
+    var c = typeof window.CLOUD_WORKER_BASE === 'string' ? window.CLOUD_WORKER_BASE.trim().replace(/\/$/, '') : '';
+    return c;
+  }
+  function applyQueryToken() {
+    try {
+      var p = new URLSearchParams(window.location.search);
+      var t = p.get('token');
+      if (t) document.getElementById('viewReadToken').value = t;
+    } catch (e) {}
+  }
+  function applyCloudSnapshotToSession(snap) {
+    var docs = snap.documents != null ? snap.documents : [];
+    var teams = snap.teams != null ? snap.teams : [];
+    var items = snap.items != null ? snap.items : [];
+    var map = snap.mapPositions != null ? snap.mapPositions : {};
+    sessionStorage.setItem('TOOLKIT_CLOUD_MODE', '1');
+    sessionStorage.setItem('TOOLKIT_CLOUD_DOCS', JSON.stringify(docs));
+    sessionStorage.setItem('TOOLKIT_CLOUD_TEAMS', JSON.stringify(teams));
+    sessionStorage.setItem('TOOLKIT_CLOUD_ITEMS', JSON.stringify(items));
+    sessionStorage.setItem('TOOLKIT_CLOUD_MAP', JSON.stringify(map));
+    window.location.href = '../index.html';
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    try {
+      var wb = localStorage.getItem('cloud_worker_base');
+      if (wb) document.getElementById('viewWorkerBase').value = wb;
+      var at = localStorage.getItem('cloud_admin_token');
+      if (at) document.getElementById('viewAdminToken').value = at;
+    } catch (e) {}
+    applyQueryToken();
+    document.getElementById('viewLoadBtn').addEventListener('click', function () {
+      var status = document.getElementById('viewStatus');
+      status.textContent = '';
+      var base = baseUrl();
+      var token = (document.getElementById('viewReadToken').value || '').trim();
+      if (!base) {
+        status.textContent = '请填写 Worker 地址或在 cloud/config.js 设置 CLOUD_WORKER_BASE。';
+        return;
+      }
+      if (!token) {
+        status.textContent = '请填写只读令牌。';
+        return;
+      }
+      status.textContent = '正在拉取…';
+      var url = base + '/api/snapshot?token=' + encodeURIComponent(token);
+      fetch(url)
+        .then(function (r) {
+          return r.text().then(function (t) {
+            return { ok: r.ok, status: r.status, text: t };
+          });
+        })
+        .then(function (res) {
+          if (!res.ok) {
+            var msg = res.text;
+            try {
+              var j = JSON.parse(res.text);
+              if (j.error) msg = j.error;
+            } catch (e) {}
+            throw new Error(res.status + ' ' + msg);
+          }
+          applyCloudSnapshotToSession(JSON.parse(res.text));
+        })
+        .catch(function (err) {
+          status.textContent = '失败：' + (err.message || String(err));
+        });
+    });
+
+    document.getElementById('viewAdminLoadBtn').addEventListener('click', function () {
+      var status = document.getElementById('viewAdminStatus');
+      status.textContent = '';
+      var base = baseUrl();
+      var adminTok = (document.getElementById('viewAdminToken').value || '').trim();
+      if (!base) {
+        status.textContent = '请填写 Worker 地址。';
+        return;
+      }
+      if (!adminTok) {
+        status.textContent = '请填写主持人全量令牌。';
+        return;
+      }
+      status.textContent = '正在拉取全量快照…';
+      var url = base + '/api/snapshot/all?token=' + encodeURIComponent(adminTok);
+      fetch(url)
+        .then(function (r) {
+          return r.text().then(function (t) {
+            return { ok: r.ok, status: r.status, text: t };
+          });
+        })
+        .then(function (res) {
+          if (!res.ok) {
+            var msg = res.text;
+            try {
+              var j = JSON.parse(res.text);
+              if (j.error) msg = j.error;
+            } catch (e) {}
+            throw new Error(res.status + ' ' + msg);
+          }
+          var snap = JSON.parse(res.text);
+          try {
+            localStorage.setItem('cloud_admin_token', adminTok);
+          } catch (e) {}
+          applyCloudSnapshotToSession(snap);
+        })
+        .catch(function (err) {
+          status.textContent = '失败：' + (err.message || String(err));
+        });
+    });
+  });
+})();
+</script>
+</body>
+</html>

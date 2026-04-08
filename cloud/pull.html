@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云快照 · 拉取合并到本机</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="config.js"></script>
+    <script src="config.local.js"></script>
+    <script src="merge.js"></script>
+    <script src="pull.js" defer></script>
+</head>
+<body>
+<div class="docs-container" style="max-width: 640px;">
+    <div class="top-bar">
+        <button type="button" class="back-btn" onclick="location.href='../index.html'">← 返回主界面</button>
+    </div>
+    <h2>⬇️ 从云端拉取并合并到本机</h2>
+    <p style="color:#5f7f9e; font-size:0.95rem; margin-bottom:1.2rem;">
+        将 Worker 上的快照合并进<strong>当前浏览器</strong>的 localStorage。文档按 <code>lastModified</code> 较新者覆盖同 id；图鉴以云端条目覆盖同 id；队伍会合并队员与背包数量相加。
+    </p>
+    <div class="form-field" style="margin-bottom:1rem;">
+        <label>Worker 根地址</label>
+        <input type="url" id="pullWorkerBase" placeholder="https://你的-worker.workers.dev" style="width:100%;padding:0.5rem;border-radius:0.6rem;border:1px solid #cbdbe0;">
+    </div>
+
+    <div style="border:1px solid #e2edf7;border-radius:1rem;padding:1rem;margin-bottom:1.2rem;background:#fafcff;">
+        <h3 style="font-size:1rem;margin-bottom:0.6rem;">单队快照</h3>
+        <div class="form-field" style="margin-bottom:0.8rem;">
+            <label>只读令牌（readToken）</label>
+            <input type="password" id="pullReadToken" autocomplete="off" style="width:100%;padding:0.5rem;border-radius:0.6rem;border:1px solid #cbdbe0;">
+        </div>
+        <button type="button" class="create-btn" id="pullTeamBtn" style="border:none;cursor:pointer;">拉取本队并合并</button>
+        <p id="pullTeamStatus" style="margin-top:0.6rem;color:#2c6e9e;min-height:1.2em;"></p>
+    </div>
+
+    <div style="border:1px solid #e2edf7;border-radius:1rem;padding:1rem;margin-bottom:1rem;background:#fffaf8;">
+        <h3 style="font-size:1rem;margin-bottom:0.6rem;">主持人 · 全槽合并</h3>
+        <p style="font-size:0.85rem;color:#7f8c9a;margin-bottom:0.6rem;">合并 snap:1～5 后再写入本机（勿泄露令牌）。</p>
+        <div class="form-field" style="margin-bottom:0.8rem;">
+            <label>ADMIN_READ_TOKEN</label>
+            <input type="password" id="pullAdminToken" autocomplete="off" style="width:100%;padding:0.5rem;border-radius:0.6rem;border:1px solid #cbdbe0;">
+        </div>
+        <button type="button" class="import-btn" id="pullAdminBtn" style="border:none;cursor:pointer;">拉取全量并合并到本机</button>
+        <p id="pullAdminStatus" style="margin-top:0.6rem;color:#c0392b;min-height:1.2em;"></p>
+    </div>
+</div>
+</body>
+</html>

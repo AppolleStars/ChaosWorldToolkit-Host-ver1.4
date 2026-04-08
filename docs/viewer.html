@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>浏览文档 · 冒险日志</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="../cloud/cloud-bridge.js"></script>
+</head>
+<body>
+<div class="docs-container" style="max-width: 900px;">
+    <div class="top-bar">
+        <div class="back-btn-group">
+            <button class="back-btn" id="backToDocsBtn">← 返回文档库</button>
+        </div>
+    </div>
+
+    <div class="viewer-header">
+        <span class="doc-title" id="docTitleDisplay">加载中...</span>
+        <span class="doc-stats" id="docStats">📝 0 条记录</span>
+    </div>
+
+    <div class="records-list-view" id="recordsContainer">
+        <div class="empty-msg-view">✨ 加载文档中...</div>
+    </div>
+</div>
+
+<script src="viewer.js"></script>
+</body>
+</html>

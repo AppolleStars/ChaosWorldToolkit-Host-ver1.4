@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云快照 · 上传</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="config.js"></script>
+    <script src="config.local.js"></script>
+    <script src="merge.js"></script>
+    <script src="upload.js" defer></script>
+</head>
+<body>
+<div class="docs-container" style="max-width: 640px;">
+    <div class="top-bar">
+        <button type="button" class="back-btn" onclick="location.href='../index.html'">← 返回主界面</button>
+    </div>
+    <h2>☁️ 上传云快照</h2>
+    <p style="color:#5f7f9e; font-size:0.95rem; margin-bottom:1.2rem;">
+        将<strong>当前浏览器</strong>中与所选队伍相关的聊天记录、该队伍信息、全量物品图鉴、以及该队队员的地图坐标打包为 JSON，上传到 Cloudflare Worker（对应 5 个队伍槽位之一，由<strong>写入密钥</strong>决定）。
+    </p>
+    <div class="form-field" style="margin-bottom:1rem;">
+        <label>Worker 根地址</label>
+        <input type="url" id="cloudWorkerBase" placeholder="https://你的-worker.workers.dev" style="width:100%;padding:0.5rem;border-radius:0.6rem;border:1px solid #cbdbe0;">
+        <small style="color:#7f8c9a;">可在 <code>cloud/config.js</code> 中设置默认 <code>CLOUD_WORKER_BASE</code></small>
+    </div>
+    <div class="form-field" style="margin-bottom:1rem;">
+        <label>写入密钥（X-Write-Key）</label>
+        <input type="password" id="cloudWriteKey" autocomplete="off" placeholder="本队专用，勿发错群" style="width:100%;padding:0.5rem;border-radius:0.6rem;border:1px solid #cbdbe0;">
+    </div>
+    <div class="form-field" style="margin-bottom:1rem;">
+        <label>要上传的本地队伍</label>
+        <select id="cloudLocalTeam" style="width:100%;padding:0.5rem;border-radius:0.6rem;border:1px solid #cbdbe0;"></select>
+    </div>
+    <label style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;cursor:pointer;">
+        <input type="checkbox" id="cloudIncludeUncat">
+        包含「未归类」文档（teamId 为空的记录）
+    </label>
+    <div style="border:1px solid #e2edf7;border-radius:1rem;padding:1rem;margin-bottom:1rem;background:#fafcff;">
+        <label style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.6rem;cursor:pointer;">
+            <input type="checkbox" id="cloudMergeBeforeUpload">
+            上传前与云端同槽快照合并（需本队<strong>只读令牌</strong>；同文档 id 以<strong>本机</strong>为准）
+        </label>
+        <div class="form-field" style="margin-bottom:0;">
+            <label>只读令牌（合并用）</label>
+            <input type="password" id="cloudMergeReadToken" autocomplete="off" placeholder="与当前写入密钥对应槽位的 readToken" style="width:100%;padding:0.5rem;border-radius:0.6rem;border:1px solid #cbdbe0;">
+        </div>
+    </div>
+    <button type="button" class="create-btn" id="cloudDoUpload" style="border:none;cursor:pointer;">上传到云端</button>
+    <p id="cloudUploadStatus" style="margin-top:1rem;color:#2c6e9e;min-height:1.5em;"></p>
+</div>
+</body>
+</html>

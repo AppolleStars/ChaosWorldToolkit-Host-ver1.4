@@ -1,0 +1,59 @@
+云快照（5 队伍槽位）配置清单
+============================
+
+【已放在仓库里的文件】
+- cloud/worker/teams_config.example.json     五队 writeKey / readToken（示例，生产请更换）
+- cloud/worker/TEAMS_CONFIG.oneline.txt      同上内容的一行 JSON，给 wrangler secret put 粘贴用
+- cloud/worker/ADMIN_READ_TOKEN.example.txt  主持人全量只读令牌示例（与 wrangler [vars] 默认一致）
+- cloud/worker/.dev.vars.example             本地 wrangler dev 用（含 ADMIN_READ_TOKEN）
+- cloud/worker/setup.ps1                     Windows 一键：npm install、login、创建 KV
+- cloud/config.local.js                      填写 Worker 根 URL（https://xxx.workers.dev）
+- cloud/merge.js                             快照合并逻辑（上传前合并、拉取合并）
+- cloud/pull.html                            从云端拉取并写入本机 localStorage
+
+【推荐流程 · Windows】
+1) 安装 Node.js LTS：https://nodejs.org/
+2) 打开 PowerShell，进入目录：
+   cd "……\ChaosWorldToolkit-Host ver1.4\cloud\worker"
+3) 若执行策略禁止脚本，先运行：
+   Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+4) 运行：
+   .\setup.ps1
+5) 将 setup 输出的两个 KV id 填入 wrangler.toml 的 id 与 preview_id（替换 REPLACE_ME）
+6) 部署 Worker：
+   npx wrangler deploy
+7) 编辑 cloud/config.local.js，把 CLOUD_WORKER_BASE 改为部署后的 Workers 地址（无末尾斜杠）
+8) 将整站（含 cloud/）部署到 GitHub Pages / Cloudflare Pages 等
+9) 在 Cloudflare Dashboard → Workers → 你的 Worker → Settings → Variables，
+   或将 wrangler.toml 里 ALLOWED_ORIGIN 改为你的静态站来源，例如：
+   https://你的用户名.github.io
+   （多个用英文逗号分隔；仅本地调试可用 *）
+
+10) 主持人全量接口
+   - Worker：GET /api/snapshot/all?token=ADMIN_READ_TOKEN
+   - 默认示例令牌见 ADMIN_READ_TOKEN.example.txt（与 wrangler.toml [vars] 一致）
+   - 生产务必：npx wrangler secret put ADMIN_READ_TOKEN
+   - 前端：云快照查看页底部「主持人 · 全槽合并查看」；云快照拉取页「全槽合并」
+
+【生产环境密钥】
+- 不要用仓库里的示例密钥长期对外服务。请自行生成新密钥，更新 teams_config.example.json 结构，
+  然后执行：
+    cd cloud/worker
+    npx wrangler secret put TEAMS_CONFIG
+    npx wrangler secret put ADMIN_READ_TOKEN
+  TEAMS_CONFIG 粘贴一整行 JSON；ADMIN_READ_TOKEN 粘贴单独一行随机串。
+- 把新的 writeKey / readToken 分别发给各队（写入密钥勿发错群）；主持人令牌勿发给各队玩家。
+
+【npm 脚本（在项目根目录）】
+  npm run cloud:install   安装 cloud/worker 依赖
+  npm run cloud:dev       本地调试 Worker（需已填好 wrangler.toml 的 KV id）
+  npm run cloud:deploy    部署 Worker
+  npm run cloud:kv        仅创建生产用 KV 命名空间（若已创建可忽略）
+
+【使用】
+- 上传：主界面「云快照上传」→ 选本地队伍 → writeKey；可选「上传前与云端合并」+ 本槽 readToken
+- 查看：「云快照查看」→ readToken；链接可带 ?token=只读令牌 预填；主持人用页内「全槽合并查看」
+- 拉取：「云快照拉取」→ 将云端快照合并进本机（单队或主持人全量）
+
+【槽位说明】
+Worker 按写入密钥写入 snap:1..snap:5，与工具内队伍 id 无自动绑定，由你们约定哪队用哪个密钥。

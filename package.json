@@ -1,0 +1,14 @@
+{
+  "name": "ChaosWorldToolkit",
+  "version": "0.1",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cloud:install": "cd cloud/worker && npm install",
+    "cloud:dev": "cd cloud/worker && npx wrangler dev",
+    "cloud:deploy": "cd cloud/worker && npx wrangler deploy",
+    "cloud:kv": "cd cloud/worker && npx wrangler kv namespace create SNAPSHOT"
+  },
+  "private": true
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工具箱 · 主控台</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="cloud/cloud-bridge.js"></script>
+</head>
+<body>
+<div class="dashboard-container">
+    <header class="dashboard-header">
+        <h1>📖 混乱世界 · 工具箱</h1>
+        <p class="sub">选择功能，管理你的冒险历程</p>
+    </header>
+    <div class="button-grid" id="feature-grid">
+        <button class="feature-card" id="btn-docs">
+            <div class="icon">📜</div>
+            <h2>聊天记录库</h2>
+            <p>存储/编辑过往聊天记录</p>
+        </button>
+        <!-- 队伍管理按钮（替换命运骰子） -->
+        <button class="feature-card" id="btn-team">
+            <div class="icon">👥</div>
+            <h2>队伍管理</h2>
+            <p>管理冒险队伍与队员信息</p>
+        </button>
+        <button class="feature-card" id="btn-map">
+            <div class="icon">🗺️</div>
+            <h2>世界地图</h2>
+            <p>查看混乱世界的地图</p>
+        </button>
+        <button class="feature-card" id="btn-encyclopedia">
+            <div class="icon">📖</div>
+            <h2>图鉴</h2>
+            <p>查看物品、怪物等百科</p>
+        </button>
+        <button class="feature-card" id="btn-cloud-upload">
+            <div class="icon">☁️</div>
+            <h2>云快照上传</h2>
+            <p>将本机队伍数据同步到云端（需 Worker）</p>
+        </button>
+        <button class="feature-card" id="btn-cloud-view">
+            <div class="icon">🌐</div>
+            <h2>云快照查看</h2>
+            <p>用只读令牌在任意设备浏览快照</p>
+        </button>
+        <button class="feature-card" id="btn-cloud-pull">
+            <div class="icon">⬇️</div>
+            <h2>云快照拉取</h2>
+            <p>从云端合并到本机 localStorage</p>
+        </button>
+    </div>
+    <footer class="dashboard-footer">
+        <small>全AI生成 · 模块化管理 · 支持扩展</small>
+    </footer>
+</div>
+<script src="main.js"></script>
+</body>
+</html>
