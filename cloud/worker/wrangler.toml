@@ -12,7 +12,8 @@ id = "1d7e89eed6844af5b236e93eea2d6658"
 preview_id = "00b2e8e65fa94271a54ebffa473b914d"
 
 [vars]
-ALLOWED_ORIGIN = "*"
+# 浏览器 fetch Worker 时的 Origin 是 https://appollestars.github.io（无仓库路径）
+ALLOWED_ORIGIN = "https://appollestars.github.io"
 # 与 teams_config.example.json / TEAMS_CONFIG.oneline.txt 一致；生产务必改为自有密钥：
 #   npx wrangler secret put TEAMS_CONFIG
 # 主持人全量接口 GET /api/snapshot/all ；生产请：npx wrangler secret put ADMIN_READ_TOKEN
