@@ -1,6 +1,11 @@
 云快照（5 队伍槽位）配置清单
 ============================
 
+【静态共享（主界面默认流程）】
+- 公开数据文件：data/shared-snapshot.json（仅主持人更新并 push）
+- 玩家：导出 JSON 给主持人 → 标准快照；查看共享快照（只读）；合并共享到本机
+- 说明：data/HOST_UPDATE.txt
+
 【已放在仓库里的文件】
 - cloud/worker/teams_config.example.json     五队 writeKey / readToken（示例，生产请更换）
 - cloud/worker/TEAMS_CONFIG.oneline.txt      同上内容的一行 JSON，给 wrangler secret put 粘贴用
@@ -51,9 +56,8 @@
   npm run cloud:kv        仅创建生产用 KV 命名空间（若已创建可忽略）
 
 【使用】
-- 上传：主界面「云快照上传」→ 选本地队伍 → writeKey；可选「上传前与云端合并」+ 本槽 readToken
-- 查看：「云快照查看」→ readToken；链接可带 ?token=只读令牌 预填；主持人用页内「全槽合并查看」
-- 拉取：「云快照拉取」→ 将云端快照合并进本机（单队或主持人全量）
+- 主界面：导出给主持人 / 查看共享快照（静态 JSON）/ 合并共享到本机
+- Worker（可选，见页脚链接）：上传 → writeKey；查看 → readToken 或主持人全量；拉取 → 合并本机
 
 【槽位说明】
 Worker 按写入密钥写入 snap:1..snap:5，与工具内队伍 id 无自动绑定，由你们约定哪队用哪个密钥。

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>导出 JSON · 提交主持人</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="export-for-host.js" defer></script>
+</head>
+<body>
+<div class="docs-container" style="max-width: 640px;">
+    <div class="top-bar">
+        <button type="button" class="back-btn" onclick="location.href='../index.html'">← 返回主界面</button>
+    </div>
+    <h2>导出 JSON 给主持人</h2>
+    <p style="color:#5f7f9e; font-size:0.95rem; margin-bottom:1.2rem;">
+        将本机与<strong>所选队伍</strong>相关的聊天记录、队伍卡片、全量图鉴、该队队员地图坐标打包为一份标准快照 JSON，下载后发给主持人汇总；<strong>不会上传</strong>到任何服务器。
+    </p>
+    <div class="form-field" style="margin-bottom:1rem;">
+        <label>要导出的本地队伍</label>
+        <select id="exportLocalTeam" style="width:100%;padding:0.5rem;border-radius:0.6rem;border:1px solid #cbdbe0;"></select>
+    </div>
+    <label style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;cursor:pointer;">
+        <input type="checkbox" id="exportIncludeUncat">
+        包含「未归类」文档（teamId 为空的记录）
+    </label>
+    <button type="button" class="create-btn" id="exportDoDownload" style="border:none;cursor:pointer;">下载 JSON</button>
+    <p id="exportStatus" style="margin-top:1rem;color:#2c6e9e;min-height:1.5em;"></p>
+
+    <hr style="margin:2rem 0;border:none;border-top:1px solid #e2edf7;">
+
+    <p style="color:#7f8c9a; font-size:0.9rem;">
+        主持人也可用本页在本地整理后更新 <code>data/shared-snapshot.json</code>。可选 <a href="upload.html">Worker 上传</a>。
+    </p>
+</div>
+</body>
+</html>

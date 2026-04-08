@@ -28,13 +28,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    document.getElementById('btn-cloud-upload')?.addEventListener('click', () => {
-        window.location.href = 'cloud/upload.html';
+    document.getElementById('btn-export-host')?.addEventListener('click', () => {
+        window.location.href = 'cloud/export-for-host.html';
     });
-    document.getElementById('btn-cloud-view')?.addEventListener('click', () => {
-        window.location.href = 'cloud/view.html';
+    document.getElementById('btn-shared-view')?.addEventListener('click', () => {
+        window.location.href = 'cloud/static-view.html';
     });
-    document.getElementById('btn-cloud-pull')?.addEventListener('click', () => {
-        window.location.href = 'cloud/pull.html';
+    document.getElementById('btn-shared-pull')?.addEventListener('click', () => {
+        window.location.href = 'cloud/static-pull.html';
     });
 });

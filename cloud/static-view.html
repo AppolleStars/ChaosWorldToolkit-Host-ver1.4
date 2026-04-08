@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>共享快照 · 查看</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="docs-container" style="max-width: 560px;">
+    <div class="top-bar">
+        <button type="button" class="back-btn" onclick="location.href='../index.html'">← 返回主界面</button>
+    </div>
+    <h2>查看共享快照</h2>
+    <p style="color:#5f7f9e; font-size:0.95rem; margin-bottom:1.2rem;">
+        从网站同目录下的 <code>data/shared-snapshot.json</code> 加载<strong>主持人已发布</strong>的数据，进入工具箱<strong>只读</strong>浏览；不会改动你本机的 localStorage（点顶部「退出云快照」即恢复）。
+    </p>
+    <div class="form-field" style="margin-bottom:1rem;">
+        <label>快照地址（一般不用改）</label>
+        <input type="url" id="staticSnapshotUrl" placeholder="默认：../data/shared-snapshot.json" style="width:100%;padding:0.5rem;border-radius:0.6rem;border:1px solid #cbdbe0;">
+    </div>
+    <button type="button" class="create-btn" id="staticViewLoadBtn" style="border:none;cursor:pointer;">加载并进入工具箱</button>
+    <p id="staticViewStatus" style="margin-top:1rem;color:#c0392b;min-height:1.5em;"></p>
+
+    <hr style="margin:2rem 0;border:none;border-top:1px solid #e2edf7;">
+
+    <p style="color:#7f8c9a; font-size:0.9rem;">
+        仅主持人向仓库更新 <code>data/shared-snapshot.json</code>。说明见 <code>data/HOST_UPDATE.txt</code>。可选 <a href="view.html">Worker 令牌查看</a>。
+    </p>
+</div>
+<script>
+(function () {
+  var DEFAULT_REL = '../data/shared-snapshot.json';
+
+  function resolveUrl(input) {
+    var s = (input || '').trim();
+    if (!s) return new URL(DEFAULT_REL, window.location.href).href;
+    try {
+      return new URL(s, window.location.href).href;
+    } catch (e) {
+      return new URL(DEFAULT_REL, window.location.href).href;
+    }
+  }
+
+  function applyCloudSnapshotToSession(snap) {
+    var docs = snap.documents != null ? snap.documents : [];
+    var teams = snap.teams != null ? snap.teams : [];
+    var items = snap.items != null ? snap.items : [];
+    var map = snap.mapPositions != null ? snap.mapPositions : {};
+    sessionStorage.setItem('TOOLKIT_CLOUD_MODE', '1');
+    sessionStorage.setItem('TOOLKIT_CLOUD_DOCS', JSON.stringify(docs));
+    sessionStorage.setItem('TOOLKIT_CLOUD_TEAMS', JSON.stringify(teams));
+    sessionStorage.setItem('TOOLKIT_CLOUD_ITEMS', JSON.stringify(items));
+    sessionStorage.setItem('TOOLKIT_CLOUD_MAP', JSON.stringify(map));
+    window.location.href = '../index.html';
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var urlInput = document.getElementById('staticSnapshotUrl');
+    try {
+      var saved = sessionStorage.getItem('TOOLKIT_STATIC_SNAPSHOT_URL');
+      if (saved) urlInput.value = saved;
+    } catch (e) {}
+
+    document.getElementById('staticViewLoadBtn').addEventListener('click', function () {
+      var status = document.getElementById('staticViewStatus');
+      status.textContent = '';
+      var target = resolveUrl(urlInput.value);
+      try {
+        sessionStorage.setItem('TOOLKIT_STATIC_SNAPSHOT_URL', urlInput.value.trim() || DEFAULT_REL);
+      } catch (e) {}
+      status.textContent = '正在拉取…';
+      status.style.color = '#2c6e9e';
+      fetch(target, { cache: 'no-store' })
+        .then(function (r) {
+          return r.text().then(function (t) {
+            return { ok: r.ok, status: r.status, text: t };
+          });
+        })
+        .then(function (res) {
+          if (!res.ok) {
+            throw new Error(res.status + ' ' + (res.text.slice(0, 200) || ''));
+          }
+          var snap = JSON.parse(res.text);
+          applyCloudSnapshotToSession(snap);
+        })
+        .catch(function (err) {
+          status.style.color = '#c0392b';
+          status.textContent = '失败：' + (err.message || String(err));
+        });
+    });
+  });
+})();
+</script>
+</body>
+</html>

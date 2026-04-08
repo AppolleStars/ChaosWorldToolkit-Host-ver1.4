@@ -35,24 +35,27 @@
             <h2>图鉴</h2>
             <p>查看物品、怪物等百科</p>
         </button>
-        <button class="feature-card" id="btn-cloud-upload">
-            <div class="icon">☁️</div>
-            <h2>云快照上传</h2>
-            <p>将本机队伍数据同步到云端（需 Worker）</p>
+        <button class="feature-card" id="btn-export-host">
+            <div class="icon">📤</div>
+            <h2>导出 JSON 给主持人</h2>
+            <p>标准快照格式，本地下载后发给主持人汇总</p>
         </button>
-        <button class="feature-card" id="btn-cloud-view">
+        <button class="feature-card" id="btn-shared-view">
             <div class="icon">🌐</div>
-            <h2>云快照查看</h2>
-            <p>用只读令牌在任意设备浏览快照</p>
+            <h2>查看共享快照</h2>
+            <p>阅读主持人发布在站点的最新公开数据（只读）</p>
         </button>
-        <button class="feature-card" id="btn-cloud-pull">
+        <button class="feature-card" id="btn-shared-pull">
             <div class="icon">⬇️</div>
-            <h2>云快照拉取</h2>
-            <p>从云端合并到本机 localStorage</p>
+            <h2>合并共享到本机</h2>
+            <p>把公开快照合并进当前浏览器本地存档</p>
         </button>
     </div>
     <footer class="dashboard-footer">
         <small>全AI生成 · 模块化管理 · 支持扩展</small>
+        <small class="footer-extra" style="display:block;margin-top:0.5rem;opacity:0.85;">
+            可选 Worker：<a href="cloud/upload.html">上传</a> · <a href="cloud/view.html">令牌查看</a> · <a href="cloud/pull.html">拉取</a>
+        </small>
     </footer>
 </div>
 <script src="main.js"></script>

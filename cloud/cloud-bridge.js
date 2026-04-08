@@ -106,7 +106,7 @@
         'position:fixed;z-index:99999;left:0;right:0;top:0;background:#1a2a44;color:#e9eef5;padding:10px 14px;font-size:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 2px 12px rgba(0,0,0,.2);'
       );
       bar.innerHTML =
-        '<span>☁️ 正在查看<strong>云快照</strong>（只读，不会改动本机存档）</span>';
+        '<span>☁️ 正在查看<strong>共享快照</strong>（只读，不会改动本机存档）</span>';
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.textContent = '退出云快照';

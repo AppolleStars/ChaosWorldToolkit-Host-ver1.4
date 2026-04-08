@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>共享快照 · 合并到本机</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="merge.js"></script>
+    <script src="static-pull.js" defer></script>
+</head>
+<body>
+<div class="docs-container" style="max-width: 560px;">
+    <div class="top-bar">
+        <button type="button" class="back-btn" onclick="location.href='../index.html'">← 返回主界面</button>
+    </div>
+    <h2>合并共享到本机</h2>
+    <p style="color:#5f7f9e; font-size:0.95rem; margin-bottom:1.2rem;">
+        从 <code>data/shared-snapshot.json</code> 拉取主持人发布的数据，按与「云拉取」相同的规则<strong>合并进当前浏览器</strong>的 localStorage（适合把公开进度同步到自己设备上）。
+    </p>
+    <p style="color:#c0392b; font-size:0.9rem; margin-bottom:1rem;">
+        若当前正处于「只读快照」模式，请先返回主界面并点击顶部「退出云快照」再合并。
+    </p>
+    <div class="form-field" style="margin-bottom:1rem;">
+        <label>快照地址（一般不用改）</label>
+        <input type="url" id="staticPullUrl" placeholder="默认：../data/shared-snapshot.json" style="width:100%;padding:0.5rem;border-radius:0.6rem;border:1px solid #cbdbe0;">
+    </div>
+    <button type="button" class="create-btn" id="staticPullBtn" style="border:none;cursor:pointer;">拉取并合并到本机</button>
+    <p id="staticPullStatus" style="margin-top:1rem;color:#2c6e9e;min-height:1.5em;"></p>
+
+    <hr style="margin:2rem 0;border:none;border-top:1px solid #e2edf7;">
+
+    <p style="color:#7f8c9a; font-size:0.9rem;">
+        可选 <a href="pull.html">Worker 令牌拉取</a>。
+    </p>
+</div>
+</body>
+</html>

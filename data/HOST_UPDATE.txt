@@ -1,0 +1,8 @@
+主持人如何发布「共享快照」（仅你操作）
+
+1. 收集各玩家通过「导出 JSON 给主持人」发来的文件，或在本机工具箱里自行整理。
+2. 按你的流程合并为一份快照，顶层字段需与示例一致：v、updatedAt、documents、teams、items、mapPositions。
+3. 用合并结果覆盖本仓库的 data/shared-snapshot.json，可按需填写 updatedAt（建议 ISO 时间）。
+4. 推送 GitHub，由 GitHub Pages 提供 …/data/shared-snapshot.json；玩家即可在主界面「查看共享快照 / 合并共享到本机」使用。
+
+可选：cloud/ 下的 Cloudflare Worker 上传、令牌查看、拉取仍保留给进阶场景。
